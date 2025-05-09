@@ -13,10 +13,12 @@ const App = () => {
   };
 
   return (
-    <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
-      <NavLink to="/" onClick={() => setOpen(false)}>
-        <img className="h-9 w-10 object-contain" src={assets.logo} alt="logo" />
-      </NavLink>
+    <nav className="h-[80px] flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
+      <div className="w-25 h-25">
+        <NavLink to="/" onClick={() => setOpen(false)}>
+          <img className="w-full h-full" src={assets.logo} alt="logo" />
+        </NavLink>
+      </div>
 
       {/* Desktop Menu */}
       <div className="hidden sm:flex items-center gap-8">
