@@ -37,7 +37,7 @@ const AddProduct = () => {
                     hidden
                   />
                   <img
-                    className="max-w-24 cursor-pointer"
+                    className="w-24 h-24 object-cover rounded cursor-pointer"
                     src={
                       files[index]
                         ? URL.createObjectURL(files[index])
