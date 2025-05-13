@@ -6,6 +6,10 @@
 }
 
 @theme {
-  --color-primary: #4fb8b;
+  --color-primary: #4fbf8b;
   --color-primary-dull: #44ae7c;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
