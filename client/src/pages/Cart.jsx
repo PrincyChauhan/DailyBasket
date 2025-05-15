@@ -9,7 +9,7 @@ const Cart = () => {
     cartItems,
     removeFromCart,
     getCartCount,
-    updateCartItem,
+    updateCartQuantity,
     navigate,
     getCartAmount,
   } = useAppContext();
@@ -84,7 +84,7 @@ const Cart = () => {
                     <p>Qty:</p>
                     <select
                       onChange={(e) =>
-                        updateCartItem(product._id, Number(e.target.value))
+                        updateCartQuantity(product._id, Number(e.target.value))
                       }
                       value={cartItems[product._id]}
                       className="outline-none"
