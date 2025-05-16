@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import { assets, dummyAddress } from "../assets/assets";
+import toast from "react-hot-toast";
 
 const Cart = () => {
   const {
@@ -12,6 +13,8 @@ const Cart = () => {
     updateCartQuantity,
     navigate,
     getCartAmount,
+    axios,
+    user,
   } = useAppContext();
 
   const [cartArray, setCartArray] = useState([]);
@@ -31,6 +34,21 @@ const Cart = () => {
     setCartArray(tempArray);
   };
 
+  const getUserAddress = async () => {
+    try {
+      const { data } = await axios.get("/api/address/get");
+      if (data.success) {
+        setAddresses(data.address);
+        if (data.address.length > 0) {
+          setSelectedAddress(data.address[0]);
+        } else {
+          toast.error(data.message);
+        }
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
   const placeOrder = async () => {};
 
   useEffect(() => {
@@ -39,6 +57,11 @@ const Cart = () => {
     }
   }, [products, cartItems]);
 
+  useEffect(() => {
+    if (user) {
+      getUserAddress();
+    }
+  }, [user]);
   return products.length > 0 && cartItems ? (
     <div className="flex flex-col md:flex-row mt-16">
       <div className="flex-1 max-w-4xl">
