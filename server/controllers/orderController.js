@@ -1,42 +1,88 @@
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
 
+// export const placeOrderCOD = async (req, res) => {
+//   try {
+//     const { userId, items, address } = req.body;
+
+//     if (!address || items.length === 0) {
+//       return res.json({
+//         success: false,
+//         message: "Invaild Data",
+//       });
+//     }
+//     let amount = await items.reduce(async (acc, item) => {
+//       const product = await Product.findById(item.product);
+//       return (await acc) + product.offerPrice * item.quantity;
+//     }, 0);
+//     // Add tax charge (2%)
+//     amount += Math.floor(amount * 0.02);
+//     await Order.create({
+//       userId,
+//       items,
+//       amount,
+//       address,
+//       paymentType: "COD",
+//       isPaid: false,
+//     });
+//     return res.json({
+//       success: true,
+//       message: "Order Placed Successfully",
+//     });
+//   } catch (error) {
+//     console.log(error.message);
+//     res.json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
 export const placeOrderCOD = async (req, res) => {
   try {
     const { userId, items, address } = req.body;
 
-    if (!address || items.length === 0) {
+    // Check explicitly for userId
+    if (!userId || !address || items.length === 0) {
       return res.json({
         success: false,
-        message: "Invaild Data",
+        message: "Invalid Data: User ID, address, or items missing",
       });
     }
+
     let amount = await items.reduce(async (acc, item) => {
       const product = await Product.findById(item.product);
+      if (!product) {
+        throw new Error(`Product with ID ${item.product} not found`);
+      }
       return (await acc) + product.offerPrice * item.quantity;
     }, 0);
+
     // Add tax charge (2%)
     amount += Math.floor(amount * 0.02);
-    await Order.create({
+
+    const newOrder = await Order.create({
       userId,
       items,
       amount,
       address,
       paymentType: "COD",
+      isPaid: false,
     });
+
     return res.json({
       success: true,
       message: "Order Placed Successfully",
+      orderId: newOrder._id,
     });
   } catch (error) {
-    console.log(error.message);
+    console.log("Order creation error:", error.message);
     res.json({
-      success: true,
+      success: false,
       message: error.message,
     });
   }
 };
-
 export const getUserOrders = async (req, res) => {
   try {
     const { userId } = req.body;
