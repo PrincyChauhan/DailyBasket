@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import { assets, dummyAddress } from "../assets/assets";
+import toast from "react-hot-toast";
 
 const Cart = () => {
   const {
@@ -12,6 +13,9 @@ const Cart = () => {
     updateCartQuantity,
     navigate,
     getCartAmount,
+    axios,
+    user,
+    setCartItems,
   } = useAppContext();
 
   const [cartArray, setCartArray] = useState([]);
@@ -31,8 +35,71 @@ const Cart = () => {
     setCartArray(tempArray);
   };
 
-  const placeOrder = async () => {};
+  // const placeOrder = async () => {
+  //   try {
+  //     if (!selectedAddress) {
+  //       return toast.error("Please select an address");
+  //     }
+  //     // place order with cod
+  //     if (paymentOption === "COD") {
+  //       const { data } = await axios.post("/api/order/cod", {
+  //         userId: user._id,
+  //         items: cartArray.map((item) => ({
+  //           product: item._id,
+  //           quantity: item.quantity,
+  //         })),
+  //         address: selectedAddress._id,
+  //         isPaid: false,
+  //       });
+  //       if (data.success) {
+  //         toast.success(data.message);
+  //         setCartItems({});
+  //         navigate("/my-orders");
+  //       } else {
+  //         toast.error(data.message);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // };
 
+  const placeOrder = async () => {
+    try {
+      if (!selectedAddress) {
+        return toast.error("Please select an address");
+      }
+      // place order with cod
+      if (paymentOption === "COD") {
+        // Check if user is defined and has an _id property
+        if (!user || !user._id) {
+          return toast.error(
+            "User information is missing. Please log in again."
+          );
+        }
+
+        const { data } = await axios.post("/api/order/cod", {
+          userId: user._id,
+          items: cartArray.map((item) => ({
+            product: item._id,
+            quantity: item.quantity,
+          })),
+          address: selectedAddress._id,
+          isPaid: false,
+        });
+        if (data.success) {
+          toast.success(data.message);
+          setCartItems({});
+          navigate("/my-orders");
+        } else {
+          toast.error(data.message);
+        }
+      }
+    } catch (error) {
+      console.log("Order placement error:", error);
+      toast.error(error.response?.data?.message || error.message);
+    }
+  };
   useEffect(() => {
     if (products.length > 0 && cartItems) {
       getCart();
