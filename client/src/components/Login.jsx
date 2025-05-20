@@ -51,7 +51,7 @@ const Login = () => {
             <input
               onChange={(e) => setName(e.target.value)}
               value={name}
-              placeholder="type here"
+              placeholder="Name"
               className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary-dull"
               type="text"
               required
@@ -63,7 +63,7 @@ const Login = () => {
           <input
             onChange={(e) => setEmail(e.target.value)}
             value={email}
-            placeholder="type here"
+            placeholder="Email"
             className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary-dull"
             type="email"
             required
@@ -74,7 +74,7 @@ const Login = () => {
           <input
             onChange={(e) => setPassword(e.target.value)}
             value={password}
-            placeholder="type here"
+            placeholder="Password"
             className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary-dull"
             type="password"
             required

@@ -39,6 +39,7 @@ export const register = async (req, res) => {
 
     return res.json({
       success: true,
+      message: "Signup successful",
       user: {
         email: user.email,
         name: user.name,
@@ -71,7 +72,7 @@ export const login = async (req, res) => {
       });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password); // corrected 'comapre' to 'compare'
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.json({
         success: false,
@@ -92,6 +93,7 @@ export const login = async (req, res) => {
 
     return res.json({
       success: true,
+      message: "Login successful",
       user: {
         email: user.email,
         name: user.name,
