@@ -11,7 +11,7 @@ const AddProduct = () => {
   const [price, setPrice] = useState("");
   const [offerPrice, setOfferPrice] = useState("");
 
-  const { axios } = useAppContext();
+  const { axios, fetchProducts } = useAppContext();
 
   const onSubmitHandler = async (e) => {
     try {
@@ -31,6 +31,7 @@ const AddProduct = () => {
       const { data } = await axios.post("/api/product/add", formData);
       if (data.success) {
         toast.success(data.message);
+        fetchProducts();
         setName("");
         setDescription("");
         setCategory("");
