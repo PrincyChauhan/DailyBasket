@@ -1,14 +1,21 @@
 import toast from "react-hot-toast";
 import { useAppContext } from "../../context/AppContext";
+import { useEffect } from "react";
 
 const ProductList = () => {
   const { products, currency, axios, fetchProducts } = useAppContext();
+
+  useEffect(() => {
+    fetchProducts(); // ✅ always fetch fresh products when component mounts
+  }, []);
+
   const toggleStock = async (id, inStock) => {
     try {
       const { data } = await axios.post("/api/product/stock", {
         id,
         inStock,
       });
+      fetchProducts();
       if (data.success) {
         fetchProducts();
         toast.success(data.message);
