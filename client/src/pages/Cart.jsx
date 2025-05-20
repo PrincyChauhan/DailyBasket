@@ -71,13 +71,6 @@ const Cart = () => {
       }
       // place order with cod
       if (paymentOption === "COD") {
-        // Check if user is defined and has an _id property
-        if (!user || !user._id) {
-          return toast.error(
-            "User information is missing. Please log in again."
-          );
-        }
-
         const { data } = await axios.post("/api/order/cod", {
           userId: user._id,
           items: cartArray.map((item) => ({

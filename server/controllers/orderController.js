@@ -86,6 +86,15 @@ export const placeOrderCOD = async (req, res) => {
 export const getUserOrders = async (req, res) => {
   try {
     const { userId } = req.body;
+
+    // Check if userId exists
+    if (!userId) {
+      return res.json({
+        success: false,
+        message: "User ID is required",
+      });
+    }
+
     const orders = await Order.find({
       userId,
       $or: [
@@ -99,14 +108,15 @@ export const getUserOrders = async (req, res) => {
     })
       .populate("items.product address")
       .sort({ createdAt: -1 });
+
     res.json({
       success: true,
       orders,
     });
   } catch (error) {
-    console.log(error.message);
+    console.log("Error in getUserOrders:", error.message);
     res.json({
-      success: true,
+      success: false, // Changed to false to properly indicate an error
       message: error.message,
     });
   }
@@ -133,7 +143,7 @@ export const getAllOrders = async (req, res) => {
   } catch (error) {
     console.log(error.message);
     res.json({
-      success: true,
+      success: false,
       message: error.message,
     });
   }
