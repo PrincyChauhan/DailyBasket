@@ -1,15 +1,26 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from "../../context/AppContext";
-import { assets, dummyOrders } from "../../assets/assets";
+import { assets } from "../../assets/assets";
 
 const Orders = () => {
-  const { currency } = useAppContext();
+  const { currency, axios } = useAppContext();
   const [orders, setOrders] = useState([]);
 
   const fetchOrders = async () => {
-    setOrders(dummyOrders);
-  };
+    try {
+      const response = await axios.get("api/order/seller", {
+        withCredentials: true,
+      });
 
+      if (response.data.success) {
+        setOrders(response.data.orders);
+      } else {
+        console.log("Failed to fetch orders:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error.message);
+    }
+  };
   useEffect(() => {
     fetchOrders();
   });
@@ -30,10 +41,10 @@ const Orders = () => {
                 alt="boxIcon"
               />
               <div>
-                {order.items.map((item, index) => (
-                  <div key={index} className="flex flex-col">
+                {order.items.map((item, itemIndex) => (
+                  <div key={itemIndex} className="flex flex-col">
                     <p className="font-medium">
-                      {item.product.name}{" "}
+                      {item.product?.name || "Unknown Product"}{" "}
                       <span className="text-primary">x {item.quantity}</span>
                     </p>
                   </div>
@@ -43,17 +54,16 @@ const Orders = () => {
 
             <div className="text-sm md:text-base text-black/60">
               <p className="font-medium mb-1">
-                {order.address.firstName} {order.address.lastName}
+                {order.address?.firstName} {order.address?.lastName}
               </p>
               <p>
-                {order.address.street}, {order.address.city}
+                {order.address?.street}, {order.address?.city}
               </p>
               <p>
-                {order.address.state}, {order.address.zipcode},{" "}
-                {order.address.country}
+                {order.address?.state}, {order.address?.zipcode},{" "}
+                {order.address?.country}
               </p>
-              <p></p>
-              <p>{order.address.phone}</p>
+              <p>{order.address?.phone}</p>
             </div>
 
             <p className="font-medium text-lg my-auto text-black/70">
