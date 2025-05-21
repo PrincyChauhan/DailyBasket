@@ -202,7 +202,7 @@ export const placeOrderCOD = async (req, res) => {
 };
 export const getUserOrders = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const userId = req.userId;
 
     // Check if userId exists
     if (!userId) {

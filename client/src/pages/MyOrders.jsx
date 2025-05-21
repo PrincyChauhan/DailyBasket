@@ -19,7 +19,7 @@ const MyOrders = () => {
 
   useEffect(() => {
     if (user) {
-      fetchMyOrders();
+      fetchMyOrders(); // This sends a GET request, with JWT in cookies
     }
   }, []);
 
