@@ -19,7 +19,10 @@ await connectDB();
 await connectCloudinary();
 
 // Allow multiple Origins
-const allowedOrigin = ["http://localhost:5173"];
+const allowedOrigin = [
+  "http://localhost:5173",
+  "https://daily-basket-ten.vercel.app",
+];
 
 app.post("/stripe", express.raw({ type: "application/json" }), stripeWebHooks);
 
